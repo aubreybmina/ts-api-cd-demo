@@ -1,30 +1,47 @@
-import { getAllTasks } from '../../controllers/taskController'
-import { getMockReq, getMockRes } from '@jest-mock/express'
+import { getAllTasks, getOneTask } from '../../controllers/taskController'
+import { createRequest, createResponse } from 'node-mocks-http'
 
 describe('getAllTasks', () => {
   test('should send all task via response', () => {
     // Arrange
-    const reqMock = getMockReq()
-    const { res } = getMockRes()
+    const req = createRequest()
+    const res = createResponse()
+    const expected = [
+      {
+        id: 1,
+        name: 'Mission 01',
+        description: 'Chatbot',
+        isCompleted: false,
+      },
+    ]
 
     // Act
-    getAllTasks(reqMock, res)
+    getAllTasks(req, res)
 
     //Assert
-    expect(res.send).toBeCalledTimes(1)
+    expect(res.json()._getData()).toEqual(expected)
   })
 })
 
-// describe('getOneTasks', () => {
-//   test('should send 404 if not exist', () => {
-//     // Arrange
-//     const reqMock = getMockReq({ param: { id: '22' } as any })
-//     const { res } = getMockRes()
+describe('getOneTasks', () => {
+  test('should get one task id 1', () => {
+    // Arrange
+    const req = createRequest()
+    const res = createResponse()
+    const expected = {
+      id: 1,
+      name: 'Mission 01',
+      description: 'Chatbot',
+      isCompleted: false,
+    }
 
-//     // Act
-//     getAllTasks(reqMock, res)
+    req.params.id = '1'
 
-//     //Assert
-//     expect(res.statusCode).toBe(404)
-//   })
-// })
+    // Act
+    getOneTask(req, res)
+
+    //Assert
+    expect(res.statusCode).toBe(200)
+    expect(res.json()._getData()).toEqual(expected)
+  })
+})
