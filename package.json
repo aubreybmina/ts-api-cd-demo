@@ -7,7 +7,7 @@
     "dev": "tsnd src/server.ts --respawn --transpile-only --exit-child",
     "test": "jest --detectOpenHandles",
     "build": "tsc",
-    "start": "node run && node build/server.js"
+    "start": "npm run && node build/server.js"
   },
   "repository": {
     "type": "git",
